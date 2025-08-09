@@ -1,5 +1,5 @@
 // 网站特定配置
-const SITE_CONFIGS = {
+let SITE_CONFIGS = {
   // LibreOffice 翻译网站
   'translations.documentfoundation.org': {
     name: 'LibreOffice Weblate',
@@ -34,8 +34,8 @@ const SITE_CONFIGS = {
     textExtraction: {
       // 获取源文本的方法优先级
       sourceTextMethods: [
-        'dataCloneValue',  // 新增：从data-clone-value获取
-        'listGroupItemText',   // 新增：从列表项文本获取
+        'dataCloneValue', 
+        'listGroupItemText',  
         'readonlyTextarea',
         'sourceElements',
         'previousTextarea'
@@ -43,89 +43,36 @@ const SITE_CONFIGS = {
     }
   },
 
-  // Google Translate
-  'translate.google.com': {
-    name: 'Google Translate',
+  // LibreOffice 维基
+  'wiki.documentfoundation.org': {
+    name: 'LibreOffice Wiki',
     selectors: {
+      // 翻译文本区域选择器
       translationTextarea: [
-        '[data-language-for-alternatives]',
-        'textarea[aria-label*="translation"]',
-        '.tlid-translation textarea'
+        'textarea.tux-textarea-translation.mw-editfont-monospace',
+        'textarea[class*="tux-textarea-translation"]'
       ],
+      // 源文本选择器
       sourceText: [
-        '[data-language-for-alternatives="source"]',
-        'textarea[aria-label*="source"]',
-        '.tlid-source-text textarea'
+        'span.sourcemessage.mw-editfont-monospace',
+        '.twelve.columns.sourcemessage.mw-editfont-monospace',
+        'span[class*="sourcemessage"]'
       ],
-      formContainer: '.tlid-translation, .translation-container'
+      // 表单容器
+      formContainer: '.seven.columns.editcolumn, .row.tux-editor-actions-block, .tux-editor-actions-block'
     },
+    // UI 注入配置
     ui: {
-      buttonPosition: 'after',
-      buttonClass: 'llm-google-btn',
-      containerClass: 'llm-google-container'
+      buttonPosition: 'after', // after, before, inside
+      buttonClass: 'llm-wiki-btn',
+      containerClass: 'llm-wiki-container'
     },
+    // 文本获取策略
     textExtraction: {
+      // 获取源文本的方法优先级
       sourceTextMethods: [
-        'sourceElements',
-        'dataAttributes'
-      ]
-    }
-  },
-
-  // DeepL
-  'www.deepl.com': {
-    name: 'DeepL Translator',
-    selectors: {
-      translationTextarea: [
-        '[data-testid="translator-target-input"]',
-        '.lmt__target_textarea',
-        'textarea[placeholder*="translation"]'
-      ],
-      sourceText: [
-        '[data-testid="translator-source-input"]',
-        '.lmt__source_textarea',
-        'textarea[placeholder*="source"]'
-      ],
-      formContainer: '.lmt__sides_container'
-    },
-    ui: {
-      buttonPosition: 'after',
-      buttonClass: 'llm-deepl-btn',
-      containerClass: 'llm-deepl-container'
-    },
-    textExtraction: {
-      sourceTextMethods: [
-        'sourceElements',
-        'dataTestId'
-      ]
-    }
-  },
-
-  // Crowdin
-  'crowdin.com': {
-    name: 'Crowdin',
-    selectors: {
-      translationTextarea: [
-        '.translation-input textarea',
-        '[data-qa="translation-input"]',
-        'textarea[name="translation"]'
-      ],
-      sourceText: [
-        '.source-text',
-        '[data-qa="source-text"]',
-        '.original-text'
-      ],
-      formContainer: '.translation-editor, .editor-container'
-    },
-    ui: {
-      buttonPosition: 'after',
-      buttonClass: 'llm-crowdin-btn',
-      containerClass: 'llm-crowdin-container'
-    },
-    textExtraction: {
-      sourceTextMethods: [
-        'sourceElements',
-        'dataQa'
+        'spanSourceText',  // 从span元素获取源文本
+        'sourceElements'
       ]
     }
   },
@@ -142,6 +89,7 @@ const SITE_CONFIGS = {
         'textarea:not([readonly]):not([disabled])'
       ],
       sourceText: [
+        '[data-clone-value]', 
         'textarea[readonly]',
         'textarea[disabled]',
         '[class*="source"]',
@@ -157,6 +105,7 @@ const SITE_CONFIGS = {
     },
     textExtraction: {
       sourceTextMethods: [
+        'dataCloneValue', 
         'readonlyTextarea',
         'sourceElements',
         'previousTextarea'
@@ -164,6 +113,30 @@ const SITE_CONFIGS = {
     }
   }
 };
+
+SITE_CONFIGS['hosted.weblate.org'] = SITE_CONFIGS['translations.documentfoundation.org'];
+SITE_CONFIGS['hosted.weblate.org'].name = 'Weblate';
+
+// 检查当前站点是否被支持
+function isSiteSupported(hostname) {
+  if (!hostname) {
+    return false;
+  }
+  
+  // 精确匹配
+  if (SITE_CONFIGS[hostname] && hostname !== 'default') {
+    return true;
+  }
+  
+  // 部分匹配
+  for (const domain in SITE_CONFIGS) {
+    if (domain !== 'default' && hostname.includes(domain)) {
+      return true;
+    }
+  }
+  
+  return false;
+}
 
 // 获取当前网站配置
 function getCurrentSiteConfig() {
@@ -187,8 +160,14 @@ function getCurrentSiteConfig() {
 
 // 导出配置
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { SITE_CONFIGS, getCurrentSiteConfig };
+  module.exports = { SITE_CONFIGS, getCurrentSiteConfig, isSiteSupported };
 } else {
   window.SITE_CONFIGS = SITE_CONFIGS;
   window.getCurrentSiteConfig = getCurrentSiteConfig;
+  window.isSiteSupported = isSiteSupported;
+}
+
+// 确保在浏览器环境中不返回任何值
+if (typeof window !== 'undefined') {
+  undefined;
 }

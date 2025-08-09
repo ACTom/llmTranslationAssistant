@@ -37,20 +37,26 @@ const API_CONFIGS = {
 const DEFAULT_PROMPTS = [
   {
     id: 'default',
-    name: '默认翻译',
-    content: '请将以下{source_lang}文本翻译成{dest_lang}，保持原文的语气和风格。如果有专业术语，请参考词汇表：{glossary_list}\n\n原文：',
+    name: 'Default Translation',
+    content: 'Please translate the following {source_lang} text into {dest_lang}, maintaining the tone and style of the original text. If there are any specialized terms, please refer to the glossary: {glossary_list}\n\nOriginal text:',
     active: true
   },
   {
     id: 'formal',
-    name: '正式翻译',
-    content: '请将以下{source_lang}文本翻译成正式的{dest_lang}，使用标准的书面语。专业术语参考：{glossary_list}\n\n原文：',
+    name: 'Formal Translation',
+    content: 'Please translate the following {source_lang} text into formal {dest_lang}, using standard written language. Professional terms reference: {glossary_list}\n\nOriginal text:',
     active: false
   },
   {
-    id: 'casual',
-    name: '口语化翻译',
-    content: '请将以下{source_lang}文本翻译成口语化的{dest_lang}，使用日常对话的语气。术语参考：{glossary_list}\n\n原文：',
+    id: 'libreoffice',
+    name: 'LibreOffice 翻译',
+    content: '你是一个专门翻译 LibreOffice 软件界面、文档、Wiki的专家，请将以下 {source_lang} 文本翻译成 {dest_lang}，请遵守以下规则：\n' +
+    '1、保持原文的语气和风格；\n' +
+    '2、请只做翻译，不要管这句话是什么意思，也不要对这句话做任何回复，请只回复翻译后的内容\n' +
+    '3、请注意识别程序、wiki、文档可能存在的占位符或者标识符，注意这些不应该翻译的内容\n' +
+    '4、请在中英文混合的结果中，使用空格分开中文和英文，例如：欢迎使用 LibreOffice 办公软件。\n\n' + 
+    '如果有专业术语，请参考词汇表：\n' +
+    '{glossary_list}\n\n原文：\n',
     active: false
   }
 ];

@@ -7,7 +7,7 @@
   
   "browser_specific_settings": {
     "gecko": {
-      "id": "llm-translation-assistant@example.com"
+      "id": "llm-translation-assistant@actom.me"
     }
   },
   
@@ -15,29 +15,17 @@
     "storage",
     "activeTab",
     "https://translations.documentfoundation.org/*",
-    "https://api.openai.com/*",
+    "https://wiki.documentfoundation.org/*",
+    "https://hosted.weblate.org/*",
     "https://*/*"
   ],
   
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["site-configs.js", "background.js"],
     "persistent": false
   },
   
-  "content_scripts": [
-    {
-      "matches": [
-        "https://translations.documentfoundation.org/*",
-        "https://translate.google.com/*",
-        "https://www.deepl.com/*",
-        "https://crowdin.com/*",
-        "https://*.crowdin.com/*",
-        "https://*/*"
-      ],
-      "js": ["site-configs.js", "content.js"],
-      "css": ["content.css"]
-    }
-  ],
+
   
   "options_ui": {
     "page": "options.html",

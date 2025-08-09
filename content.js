@@ -1,3 +1,6 @@
+// 既然脚本已经被 background.js 注入到页面，说明应该启用翻译助手
+// 不需要再做额外的判断
+
 // 翻译助手类
 class TranslationAssistant {
   constructor() {
@@ -17,20 +20,8 @@ class TranslationAssistant {
   async loadSettings() {
     return new Promise((resolve) => {
       chrome.storage.sync.get({
-        // 基本设置
-        sourceLang: 'auto',
-        targetLang: 'zh',
-        prompts: [],
-        activePromptId: 'default',
-        autoTranslate: false,
-        // 模型设置
-        apiProvider: 'openai',
-        apiUrl: 'https://api.openai.com/v1/chat/completions',
-        apiKey: '',
-        model: 'gpt-3.5-turbo',
-        customModel: '',
-        // 词汇表
-        glossary: []
+        // 只保留 content.js 需要的基本设置
+        autoTranslate: false
       }, (items) => {
         this.settings = items;
         resolve();
@@ -40,6 +31,9 @@ class TranslationAssistant {
 
   // 注入UI元素
   injectUI() {
+    // 清理可能存在的旧按钮（避免重复）
+    this.cleanupOldButtons();
+    
     // 使用网站特定的选择器查找翻译文本区域
     const selectors = this.siteConfig.selectors.translationTextarea;
     let textareas = [];
@@ -53,11 +47,30 @@ class TranslationAssistant {
     // 去重
     textareas = [...new Set(textareas)];
     
+    // 如果没有找到textarea，记录但不再重试（避免无限循环）
+    if (textareas.length === 0) {
+      console.log('LLM Translation Assistant: No translation textareas found');
+      return;
+    }
+    
     textareas.forEach((textarea, index) => {
       // 额外验证是否是翻译输入框
       if (this.isTranslationTextarea(textarea)) {
         this.addTranslationButton(textarea, index);
       }
+    });
+  }
+  
+  // 清理旧的按钮
+  cleanupOldButtons() {
+    // 移除所有现有的翻译助手按钮和容器
+    const oldContainers = document.querySelectorAll('.llm-assistant-container');
+    oldContainers.forEach(container => container.remove());
+    
+    // 重置所有textarea的标记
+    const allTextareas = document.querySelectorAll('textarea');
+    allTextareas.forEach(textarea => {
+      delete textarea.dataset.llmAssistantAdded;
     });
   }
 
@@ -97,11 +110,11 @@ class TranslationAssistant {
     buttonContainer.className = `llm-assistant-container ${this.siteConfig.ui.containerClass}`;
     buttonContainer.innerHTML = `
       <button type="button" class="llm-translate-btn ${this.siteConfig.ui.buttonClass}" data-textarea-index="${index}">
-        ${chrome.i18n.getMessage('translate') || 'AI Translate'}
+        ${chrome.i18n.getMessage('translateButton') || 'AI Translate'}
       </button>
       <div class="llm-result-container" style="display: none;">
         <div class="llm-source-text" style="margin-bottom: 10px; padding: 8px; background: #f8f9fa; border-left: 3px solid #007bff; font-size: 12px; color: #6c757d;">
-          <strong>原文:</strong> <span class="llm-source-content"></span>
+          <strong>${chrome.i18n.getMessage('originalText') || 'Original: '}</strong> <span class="llm-source-content"></span>
         </div>
         <div class="llm-result-text"></div>
         <button type="button" class="llm-apply-btn">
@@ -177,12 +190,6 @@ class TranslationAssistant {
 
   // 处理翻译请求
   async handleTranslate(textarea, button, resultContainer, resultText) {
-    if (!this.settings.apiKey) {
-      alert(chrome.i18n.getMessage('configureFirst') || 'Please configure API settings first');
-      chrome.runtime.openOptionsPage();
-      return;
-    }
-
     // 获取源文本
     const sourceText = this.getSourceText(textarea);
     if (!sourceText) {
@@ -205,11 +212,18 @@ class TranslationAssistant {
     resultContainer.style.display = 'block';
 
     try {
-      const translation = await this.callTranslationAPI(sourceText);
+      // 通过消息传递给 background.js 处理翻译
+      const translation = await this.requestTranslation(sourceText);
       resultText.textContent = translation;
     } catch (error) {
       console.error('Translation error:', error);
-      alert(chrome.i18n.getMessage('error') || 'Translation error: ' + error.message);
+      // 如果是 API 配置错误，提示用户配置
+      if (error.message.includes('API key not configured')) {
+        alert(chrome.i18n.getMessage('configureFirst') || 'Please configure API settings first');
+        chrome.runtime.openOptionsPage();
+      } else {
+        alert(chrome.i18n.getMessage('error') || 'Translation error: ' + error.message);
+      }
     } finally {
       button.textContent = originalText;
       button.disabled = false;
@@ -227,6 +241,9 @@ class TranslationAssistant {
       switch (method) {
         case 'dataClipboardValue':
           sourceText = this.getSourceTextFromDataClipboardValue(container);
+          break;
+        case 'dataCloneValue':
+          sourceText = this.getSourceTextFromDataCloneValue(container);
           break;
         case 'listGroupItemText':
           sourceText = this.getSourceTextFromListGroupItemText(container);
@@ -352,6 +369,17 @@ class TranslationAssistant {
     }
     return '';
   }
+  // 从data-clone-value获取文本（LibreOffice Weblate专用）
+  getSourceTextFromDataCloneValue(container) {
+    const elements = container.querySelectorAll('[data-clone-value]');
+    for (const element of elements) {
+      const clipboardValue = element.getAttribute('data-clone-value');
+      if (clipboardValue && clipboardValue.trim()) {
+        return clipboardValue.trim();
+      }
+    }
+    return '';
+  }
 
   // 从列表项文本获取（LibreOffice Weblate专用）
   getSourceTextFromListGroupItemText(container) {
@@ -366,85 +394,22 @@ class TranslationAssistant {
     return '';
   }
 
-  // 获取语言名称
-  getLanguageName(langCode) {
-    const languageMap = {
-      'auto': '自动检测',
-      'zh': '中文',
-      'zh-CN': '简体中文',
-      'zh-TW': '繁体中文',
-      'en': '英语',
-      'ja': '日语',
-      'ko': '韩语',
-      'fr': '法语',
-      'de': '德语',
-      'es': '西班牙语',
-      'it': '意大利语',
-      'pt': '葡萄牙语',
-      'ru': '俄语',
-      'ar': '阿拉伯语',
-      'th': '泰语',
-      'vi': '越南语'
-    };
-    return languageMap[langCode] || langCode;
-  }
-
-  // 调用翻译API
-  async callTranslationAPI(sourceText) {
-    const model = this.settings.customModel || this.settings.model;
-    
-    // 获取当前活跃的提示词模板
-    const activePrompt = this.settings.prompts.find(p => p.id === this.settings.activePromptId) || 
-                        this.settings.prompts.find(p => p.active) ||
-                        {
-                          content: '请将以下{source_lang}文本翻译成{dest_lang}，保持原文的语气和风格。如果有专业术语，请参考词汇表：{glossary_list}\n\n原文：'
-                        };
-    
-    // 构建词汇表字符串
-    const glossaryList = this.settings.glossary.map(item => `${item.source} -> ${item.target}`).join(', ') || '无';
-    
-    // 获取语言名称
-    const sourceLangName = this.getLanguageName(this.settings.sourceLang);
-    const targetLangName = this.getLanguageName(this.settings.targetLang);
-    
-    // 替换提示词中的占位符
-    const promptContent = activePrompt.content
-      .replace('{source_lang}', sourceLangName)
-      .replace('{dest_lang}', targetLangName)
-      .replace('{glossary_list}', glossaryList);
-    
-    const requestBody = {
-      model: model,
-      messages: [
-        {
-          role: 'user',
-          content: `${promptContent}${sourceText}`
+  // 请求翻译（通过 background.js）
+  async requestTranslation(sourceText) {
+    return new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage({
+        action: 'translate',
+        sourceText: sourceText
+      }, (response) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+        } else if (response.error) {
+          reject(new Error(response.error));
+        } else {
+          resolve(response.translation);
         }
-      ],
-      temperature: 0.3,
-      max_tokens: 1000
-    };
-
-    const response = await fetch(this.settings.apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.settings.apiKey}`
-      },
-      body: JSON.stringify(requestBody)
+      });
     });
-
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    
-    if (data.choices && data.choices[0] && data.choices[0].message) {
-      return data.choices[0].message.content.trim();
-    } else {
-      throw new Error('Invalid API response format');
-    }
   }
 
   // 应用翻译结果
@@ -456,32 +421,159 @@ class TranslationAssistant {
   }
 }
 
+// 全局变量存储实例
+let translationAssistantInstance = null;
+let isInitializing = false;
+let lastInjectTime = 0;
+
+// 初始化函数
+function initializeTranslationAssistant() {
+  if (isInitializing) return;
+  
+  if (!translationAssistantInstance) {
+    isInitializing = true;
+    
+    try {
+      // 既然脚本被注入，直接初始化翻译助手
+      translationAssistantInstance = new TranslationAssistant();
+      window.translationAssistant = translationAssistantInstance;
+      console.log('Translation Assistant initialized');
+    } catch (error) {
+      console.error('Failed to initialize Translation Assistant:', error);
+    } finally {
+      isInitializing = false;
+    }
+  } else {
+    // 防止频繁重新注入（至少间隔1秒）
+    const now = Date.now();
+    if (now - lastInjectTime > 1000) {
+      lastInjectTime = now;
+      translationAssistantInstance.injectUI();
+    }
+  }
+}
+
 // 页面加载完成后初始化
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    new TranslationAssistant();
-  });
+  document.addEventListener('DOMContentLoaded', initializeTranslationAssistant);
 } else {
-  new TranslationAssistant();
+  initializeTranslationAssistant();
+}
+
+// 延迟初始化，确保动态内容加载完成（仅针对wiki站点）
+if (window.location.hostname === 'wiki.documentfoundation.org') {
+  setTimeout(initializeTranslationAssistant, 2000);
 }
 
 // 监听动态内容变化
 const observer = new MutationObserver((mutations) => {
+  let shouldReinject = false;
+  
   mutations.forEach((mutation) => {
+    // 监听子元素变化
     if (mutation.type === 'childList') {
+      // 检查新增的节点
       mutation.addedNodes.forEach((node) => {
         if (node.nodeType === Node.ELEMENT_NODE) {
-          const textareas = node.querySelectorAll ? node.querySelectorAll('textarea') : [];
-          if (textareas.length > 0 && window.translationAssistant) {
-            setTimeout(() => window.translationAssistant.injectUI(), 100);
+          // 忽略我们自己添加的按钮容器
+          if (node.classList && node.classList.contains('llm-assistant-container')) {
+            return;
+          }
+          
+          // 检查是否包含翻译相关元素
+          const hasTextarea = node.querySelector && node.querySelector('textarea.tux-textarea-translation');
+          const hasSourceText = node.querySelector && node.querySelector('.sourcemessage');
+          if (hasTextarea || hasSourceText) {
+            shouldReinject = true;
+          }
+        }
+      });
+      
+      // 检查移除的节点（仅当移除的是翻译相关元素时）
+      mutation.removedNodes.forEach((node) => {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          // 忽略我们自己移除的按钮容器
+          if (node.classList && node.classList.contains('llm-assistant-container')) {
+            return;
+          }
+          
+          // 只有当移除的是翻译相关元素时才重新注入
+          const wasTranslationElement = node.querySelector && (
+            node.querySelector('textarea.tux-textarea-translation') ||
+            node.querySelector('.sourcemessage') ||
+            node.classList.contains('tux-textarea-translation') ||
+            node.classList.contains('sourcemessage')
+          );
+          if (wasTranslationElement) {
+            shouldReinject = true;
           }
         }
       });
     }
+    
+    // 监听属性变化（更精确的条件）
+    if (mutation.type === 'attributes') {
+      const target = mutation.target;
+      // 只监听翻译相关元素的重要属性变化
+      if (target.classList && (
+          target.classList.contains('sourcemessage') || 
+          target.classList.contains('tux-textarea-translation')
+        ) && mutation.attributeName === 'class') {
+        shouldReinject = true;
+      }
+    }
   });
+  
+  if (shouldReinject && translationAssistantInstance) {
+    // 使用防抖，避免频繁重新注入
+    clearTimeout(window.reinjectTimeout);
+    window.reinjectTimeout = setTimeout(() => {
+      const now = Date.now();
+      if (now - lastInjectTime > 1000) {
+        lastInjectTime = now;
+        translationAssistantInstance.injectUI();
+      }
+    }, 500);
+  }
 });
 
 observer.observe(document.body, {
   childList: true,
-  subtree: true
+  subtree: true,
+  attributes: true,
+  attributeFilter: ['class', 'style']
 });
+
+// 监听特定于wiki.documentfoundation.org的事件
+if (window.location.hostname === 'wiki.documentfoundation.org') {
+  // 监听可能的翻译界面切换事件
+  document.addEventListener('click', (e) => {
+    // 检查是否点击了翻译相关的按钮
+    if (e.target.matches('.tux-editor-skip-button, .tux-editor-save-button')) {
+      setTimeout(() => {
+        if (translationAssistantInstance) {
+          const now = Date.now();
+          if (now - lastInjectTime > 1000) {
+            lastInjectTime = now;
+            translationAssistantInstance.injectUI();
+          }
+        }
+      }, 1000);
+    }
+  });
+  
+  // 监听键盘快捷键（CTRL+ENTER等）
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'Enter' || e.key === 'd')) {
+      setTimeout(() => {
+        if (translationAssistantInstance) {
+          const now = Date.now();
+          if (now - lastInjectTime > 1000) {
+            lastInjectTime = now;
+            translationAssistantInstance.injectUI();
+          }
+        }
+      }, 1000);
+    }
+  });
+}

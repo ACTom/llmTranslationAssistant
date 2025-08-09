@@ -8,6 +8,9 @@
   "settingsTitle": {
     "message": "Settings"
   },
+  "settingsPageTitle": {
+    "message": "LLM Translation Assistant Settings"
+  },
   "basicSettings": {
     "message": "Basic Settings"
   },
@@ -28,6 +31,12 @@
   },
   "autoDetect": {
     "message": "Auto Detect"
+  },
+  "autoTranslate": {
+    "message": "Auto Translate on Page Load"
+  },
+  "autoTranslateHelp": {
+    "message": "When enabled, automatically click the translate button when the page loads"
   },
   "prompts": {
     "message": "Prompt Templates"
@@ -83,6 +92,12 @@
   "translateButton": {
     "message": "AI Translate"
   },
+  "apply": {
+    "message": "Apply"
+  },
+  "originalText": {
+    "message": "Original:"
+  },
   "translating": {
     "message": "Translating..."
   },
@@ -136,5 +151,23 @@
   },
   "refreshSettings": {
     "message": "Refresh Display"
+  },
+  "siteSupport": {
+    "message": "Site Support"
+  },
+  "forceEnable": {
+    "message": "Force Enable"
+  },
+  "notSet": {
+    "message": "Not set"
+  },
+  "supported": {
+    "message": "Supported"
+  },
+  "forceEnabled": {
+    "message": "Force Enabled"
+  },
+  "notSupported": {
+    "message": "Not Supported"
   }
 }

@@ -1,6 +1,6 @@
 # LLM Translation Assistant
 
-一个Firefox扩展，用于在翻译网站上使用大语言模型来辅助翻译。
+一个 Firefox 扩展，用于在翻译网站上使用大语言模型来辅助翻译。
 
 ## 功能特性
 
@@ -12,11 +12,10 @@
 
 ## 支持的翻译网站
 
-- [LibreOffice翻译平台](https://translations.documentfoundation.org/)
-- [WordPress翻译平台](https://translate.wordpress.org/)
-- [Crowdin](https://crowdin.com/)
-- [Lokalise](https://lokalise.com/)
-- [Weblate](https://weblate.org/)
+- [LibreOffice 翻译平台](https://translations.documentfoundation.org/)
+- [LibreOffice 维基](https://wiki.documentfoundation.org/)
+- [Weblate](https://hosted.weblate.org/)
+- 其它Weblate系统（可强制开启）
 
 ## 支持的AI提供商
 
@@ -73,8 +72,15 @@ LLMTranslationAssistant/
 ├── popup.html             # 弹出窗口
 ├── popup.css              # 弹出窗口样式
 ├── popup.js               # 弹出窗口脚本
+├── site-configs.js        # 网站配置文件
+├── generate-icons.js      # 图标生成脚本
+├── create-png-icons.html  # PNG图标创建页面
 ├── icons/                 # 图标文件
-│   └── icon.svg
+│   ├── icon.svg
+│   ├── icon-16.svg
+│   ├── icon-32.svg
+│   ├── icon-48.svg
+│   └── icon-128.svg
 ├── _locales/              # 国际化文件
 │   ├── en/
 │   │   └── messages.json
@@ -103,8 +109,6 @@ LLMTranslationAssistant/
 
 - `storage`: 存储用户设置
 - `activeTab`: 访问当前标签页
-- `https://translations.documentfoundation.org/*`: 访问LibreOffice翻译平台
-- `https://api.openai.com/*`: 调用OpenAI API
 - `https://*/*`: 支持其他翻译网站和API服务
 
 ## 贡献指南
@@ -121,8 +125,8 @@ LLMTranslationAssistant/
 
 ### 添加新的翻译网站支持
 
-1. 在 `content.js` 中的 `isTranslationTextarea` 方法添加网站检测逻辑
-2. 在 `getSourceText` 方法中添加源文本提取逻辑
+1. 在 `site-configs.js` 中添加网站配置
+2. 在 `content.js` 中的 `getSourceText` 方法添加新增的网站提取源文本的逻辑
 3. 在 `manifest.json` 中添加网站权限
 4. 测试功能是否正常
 
@@ -130,41 +134,8 @@ LLMTranslationAssistant/
 
 MIT License
 
-## 更新日志
-
-### v1.0.0
-- 初始版本发布
-- 支持OpenAI、Anthropic、Google AI
-- 支持LibreOffice翻译平台
-- 中英文国际化支持
-- 现代化UI设计
-
-## 常见问题
-
-### Q: 如何获取API密钥？
-
-A: 
-- **OpenAI**: 访问 [OpenAI Platform](https://platform.openai.com/api-keys)
-- **Anthropic**: 访问 [Anthropic Console](https://console.anthropic.com/)
-- **Google AI**: 访问 [Google AI Studio](https://makersuite.google.com/app/apikey)
-
-### Q: 为什么翻译按钮没有出现？
-
-A: 
-1. 确保已正确配置API设置
-2. 检查是否在支持的翻译网站上
-3. 尝试刷新页面或重新加载扩展
-
-### Q: 翻译质量如何提升？
-
-A: 
-1. 选择更强大的模型（如GPT-4）
-2. 确保源文本清晰完整
-3. 可以在设置中调整温度参数
-
 ## 联系方式
 
 如有问题或建议，请通过以下方式联系：
 
-- GitHub Issues: [提交问题](https://github.com/your-username/LLMTranslationAssistant/issues)
-- Email: your-email@example.com
+- GitHub Issues: [提交问题](https://github.com/ACTom/llmTranslationAssistant/issues)

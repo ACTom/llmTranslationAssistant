@@ -1,12 +1,15 @@
 {
   "extensionName": {
-    "message": "LLM翻译助手"
+    "message": "LLM 翻译助手"
   },
   "extensionDescription": {
-    "message": "基于AI的翻译网站助手"
+    "message": "基于 AI 的翻译网站助手"
   },
   "settingsTitle": {
     "message": "设置"
+  },
+  "settingsPageTitle": {
+    "message": "LLM 翻译助手设置"
   },
   "basicSettings": {
     "message": "基本设置"
@@ -29,6 +32,12 @@
   "autoDetect": {
     "message": "自动检测"
   },
+  "autoTranslate": {
+    "message": "打开页面时自动翻译"
+  },
+  "autoTranslateHelp": {
+    "message": "启用后，页面加载时会自动点击翻译按钮进行翻译"
+  },
   "prompts": {
     "message": "提示词模板"
   },
@@ -36,13 +45,13 @@
     "message": "添加提示词"
   },
   "apiProvider": {
-    "message": "API提供商"
+    "message": "API 提供商"
   },
   "apiUrl": {
-    "message": "API地址"
+    "message": "API 地址"
   },
   "apiKey": {
-    "message": "API密钥"
+    "message": "API 密钥"
   },
   "model": {
     "message": "模型"
@@ -63,7 +72,7 @@
     "message": "导出设置"
   },
   "exportDescription": {
-    "message": "将所有设置导出为JSON文件，用于备份或迁移到其他设备。"
+    "message": "将所有设置导出为 JSON 文件，用于备份或迁移到其他设备。"
   },
   "exportButton": {
     "message": "导出设置"
@@ -72,7 +81,7 @@
     "message": "导入设置"
   },
   "importDescription": {
-    "message": "选择之前导出的JSON文件来恢复设置。"
+    "message": "选择之前导出的 JSON 文件来恢复设置。"
   },
   "importButton": {
     "message": "选择文件导入"
@@ -81,7 +90,13 @@
     "message": "保存设置"
   },
   "translateButton": {
-    "message": "AI翻译"
+    "message": "AI 翻译"
+  },
+  "apply": {
+    "message": "应用"
+  },
+  "originalText": {
+    "message": "原文:"
   },
   "translating": {
     "message": "翻译中..."
@@ -93,7 +108,7 @@
     "message": "翻译失败，请检查设置"
   },
   "noApiKey": {
-    "message": "请先在设置中配置API密钥"
+    "message": "请先在设置中配置 API 密钥"
   },
   "openSettings": {
     "message": "打开设置"
@@ -136,5 +151,23 @@
   },
   "refreshSettings": {
     "message": "刷新显示"
+  },
+  "siteSupport": {
+    "message": "站点支持"
+  },
+  "forceEnable": {
+    "message": "强制开启"
+  },
+  "notSet": {
+    "message": "未设置"
+  },
+  "supported": {
+    "message": "已支持"
+  },
+  "forceEnabled": {
+    "message": "强制开启"
+  },
+  "notSupported": {
+    "message": "不支持"
   }
 }
