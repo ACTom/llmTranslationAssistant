@@ -1,0 +1,140 @@
+{
+  "extensionName": {
+    "message": "LLM Translation Assistant"
+  },
+  "extensionDescription": {
+    "message": "AI-powered translation assistant for various translation websites"
+  },
+  "settingsTitle": {
+    "message": "Settings"
+  },
+  "basicSettings": {
+    "message": "Basic Settings"
+  },
+  "modelSettings": {
+    "message": "Model Settings"
+  },
+  "glossarySettings": {
+    "message": "Glossary"
+  },
+  "importExportSettings": {
+    "message": "Import/Export"
+  },
+  "sourceLang": {
+    "message": "Source Language"
+  },
+  "targetLang": {
+    "message": "Target Language"
+  },
+  "autoDetect": {
+    "message": "Auto Detect"
+  },
+  "prompts": {
+    "message": "Prompt Templates"
+  },
+  "addPrompt": {
+    "message": "Add Prompt"
+  },
+  "apiProvider": {
+    "message": "API Provider"
+  },
+  "apiUrl": {
+    "message": "API URL"
+  },
+  "apiKey": {
+    "message": "API Key"
+  },
+  "model": {
+    "message": "Model"
+  },
+  "customProvider": {
+    "message": "Custom"
+  },
+  "customModel": {
+    "message": "Custom Model"
+  },
+  "addGlossary": {
+    "message": "Add Term"
+  },
+  "searchGlossary": {
+    "message": "Search terms..."
+  },
+  "exportSettings": {
+    "message": "Export Settings"
+  },
+  "exportDescription": {
+    "message": "Export all settings as a JSON file for backup or transfer to other devices."
+  },
+  "exportButton": {
+    "message": "Export Settings"
+  },
+  "importSettings": {
+    "message": "Import Settings"
+  },
+  "importDescription": {
+    "message": "Select a previously exported JSON file to restore settings."
+  },
+  "importButton": {
+    "message": "Choose File to Import"
+  },
+  "saveSettings": {
+    "message": "Save Settings"
+  },
+  "translateButton": {
+    "message": "AI Translate"
+  },
+  "translating": {
+    "message": "Translating..."
+  },
+  "applyTranslation": {
+    "message": "Apply"
+  },
+  "translationError": {
+    "message": "Translation failed. Please check your settings."
+  },
+  "noApiKey": {
+    "message": "Please configure API key in settings"
+  },
+  "openSettings": {
+    "message": "Open Settings"
+  },
+  "currentProvider": {
+    "message": "Current Provider"
+  },
+  "currentModel": {
+    "message": "Current Model"
+  },
+  "apiKeyStatus": {
+    "message": "API Key Status"
+  },
+  "configured": {
+    "message": "Configured"
+  },
+  "notConfigured": {
+    "message": "Not Configured"
+  },
+  "refreshStatus": {
+    "message": "Refresh"
+  },
+  "supportedSites": {
+    "message": "Supported Sites"
+  },
+  "usage": {
+    "message": "Usage"
+  },
+  "usageInstructions": {
+    "message": "1. Navigate to a supported translation site\n2. Click the AI Translate button next to text areas\n3. Review and apply the translation"
+  },
+  "reloadExtension": {
+    "message": "Reload Extension"
+  },
+  "currentSettings": {
+    "message": "Current Settings"
+  },
+  "currentSettingsDescription": {
+    "message": "Below are all current settings (JSON format):"
+  },
+  "refreshSettings": {
+    "message": "Refresh Display"
+  }
+}

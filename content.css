@@ -1,0 +1,313 @@
+/* LLM Translation Assistant Styles */
+.llm-assistant-container {
+  margin: 8px 0;
+  padding: 10px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.llm-translate-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.llm-translate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.llm-translate-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.llm-translate-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.llm-result-container {
+  margin-top: 10px;
+  padding: 12px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.llm-source-text {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-left: 3px solid #007bff;
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+.llm-source-text strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+.llm-source-content {
+  word-break: break-word;
+  font-family: 'Courier New', monospace;
+  background: #ffffff;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #e9ecef;
+  margin-left: 4px;
+}
+
+.llm-result-text {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+  border-left: 4px solid #667eea;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #495057;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.llm-apply-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.llm-apply-btn:hover {
+  background: #218838;
+}
+
+.llm-apply-btn:active {
+  background: #1e7e34;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .llm-assistant-container {
+    margin: 6px 0;
+    padding: 8px;
+  }
+  
+  .llm-translate-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .llm-result-text {
+    font-size: 13px;
+  }
+  
+  .llm-apply-btn {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.llm-result-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 加载状态 */
+.llm-translate-btn:disabled::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 确保不与现有样式冲突 */
+.llm-assistant-container * {
+  box-sizing: border-box;
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .llm-translate-btn {
+    background: #000;
+    border: 2px solid #fff;
+  }
+  
+  .llm-result-text {
+    border-left-color: #000;
+    background: #fff;
+    color: #000;
+  }
+  
+  .llm-apply-btn {
+    background: #000;
+    border: 2px solid #fff;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .llm-assistant-container {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .llm-result-container {
+    background: #1a202c;
+    border-color: #4a5568;
+  }
+  
+  .llm-result-text {
+    background: #2d3748;
+    color: #e2e8f0;
+    border-left-color: #667eea;
+  }
+}
+
+/* 网站特定样式 */
+
+/* LibreOffice Weblate */
+.llm-weblate-container {
+  border-color: #0066cc;
+}
+
+.llm-weblate-btn {
+  background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+  font-size: 13px;
+}
+
+.llm-weblate-btn:hover {
+  background: linear-gradient(135deg, #0052a3 0%, #003366 100%);
+}
+
+/* Google Translate */
+.llm-google-container {
+  border-color: #4285f4;
+  background: #f8f9fa;
+  margin: 4px 0;
+  padding: 8px;
+}
+
+.llm-google-btn {
+  background: #4285f4;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.llm-google-btn:hover {
+  background: #3367d6;
+}
+
+/* DeepL */
+.llm-deepl-container {
+  border-color: #0f2027;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.llm-deepl-btn {
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 100%);
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.llm-deepl-btn:hover {
+  background: linear-gradient(135deg, #203a43 0%, #2c5364 100%);
+}
+
+/* Crowdin */
+.llm-crowdin-container {
+  border-color: #2e7d32;
+  background: #f1f8e9;
+}
+
+.llm-crowdin-btn {
+  background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+  border-radius: 4px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.llm-crowdin-btn:hover {
+  background: linear-gradient(135deg, #1b5e20 0%, #0d4e12 100%);
+}
+
+/* 通用网站样式 */
+.llm-generic-container {
+  border-color: #6c757d;
+}
+
+.llm-generic-btn {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+}
+
+.llm-generic-btn:hover {
+  background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+}
+
+/* 网站特定的响应式调整 */
+@media (max-width: 768px) {
+  .llm-google-container,
+  .llm-deepl-container {
+    margin: 2px 0;
+    padding: 6px;
+  }
+  
+  .llm-google-btn,
+  .llm-deepl-btn,
+  .llm-crowdin-btn,
+  .llm-weblate-btn {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+}

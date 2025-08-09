@@ -1,0 +1,140 @@
+{
+  "extensionName": {
+    "message": "LLM翻译助手"
+  },
+  "extensionDescription": {
+    "message": "基于AI的翻译网站助手"
+  },
+  "settingsTitle": {
+    "message": "设置"
+  },
+  "basicSettings": {
+    "message": "基本设置"
+  },
+  "modelSettings": {
+    "message": "模型设置"
+  },
+  "glossarySettings": {
+    "message": "词汇表"
+  },
+  "importExportSettings": {
+    "message": "导入导出"
+  },
+  "sourceLang": {
+    "message": "源语言"
+  },
+  "targetLang": {
+    "message": "目标语言"
+  },
+  "autoDetect": {
+    "message": "自动检测"
+  },
+  "prompts": {
+    "message": "提示词模板"
+  },
+  "addPrompt": {
+    "message": "添加提示词"
+  },
+  "apiProvider": {
+    "message": "API提供商"
+  },
+  "apiUrl": {
+    "message": "API地址"
+  },
+  "apiKey": {
+    "message": "API密钥"
+  },
+  "model": {
+    "message": "模型"
+  },
+  "customProvider": {
+    "message": "自定义"
+  },
+  "customModel": {
+    "message": "自定义模型"
+  },
+  "addGlossary": {
+    "message": "添加词条"
+  },
+  "searchGlossary": {
+    "message": "搜索词条..."
+  },
+  "exportSettings": {
+    "message": "导出设置"
+  },
+  "exportDescription": {
+    "message": "将所有设置导出为JSON文件，用于备份或迁移到其他设备。"
+  },
+  "exportButton": {
+    "message": "导出设置"
+  },
+  "importSettings": {
+    "message": "导入设置"
+  },
+  "importDescription": {
+    "message": "选择之前导出的JSON文件来恢复设置。"
+  },
+  "importButton": {
+    "message": "选择文件导入"
+  },
+  "saveSettings": {
+    "message": "保存设置"
+  },
+  "translateButton": {
+    "message": "AI翻译"
+  },
+  "translating": {
+    "message": "翻译中..."
+  },
+  "applyTranslation": {
+    "message": "应用"
+  },
+  "translationError": {
+    "message": "翻译失败，请检查设置"
+  },
+  "noApiKey": {
+    "message": "请先在设置中配置API密钥"
+  },
+  "openSettings": {
+    "message": "打开设置"
+  },
+  "currentProvider": {
+    "message": "当前提供商"
+  },
+  "currentModel": {
+    "message": "当前模型"
+  },
+  "apiKeyStatus": {
+    "message": "API密钥状态"
+  },
+  "configured": {
+    "message": "已配置"
+  },
+  "notConfigured": {
+    "message": "未配置"
+  },
+  "refreshStatus": {
+    "message": "刷新"
+  },
+  "supportedSites": {
+    "message": "支持的网站"
+  },
+  "usage": {
+    "message": "使用方法"
+  },
+  "usageInstructions": {
+    "message": "1. 访问支持的翻译网站\n2. 点击文本框旁的AI翻译按钮\n3. 查看并应用翻译结果"
+  },
+  "reloadExtension": {
+    "message": "重新加载扩展"
+  },
+  "currentSettings": {
+    "message": "当前设置"
+  },
+  "currentSettingsDescription": {
+    "message": "以下是当前的所有设置信息（JSON格式）："
+  },
+  "refreshSettings": {
+    "message": "刷新显示"
+  }
+}

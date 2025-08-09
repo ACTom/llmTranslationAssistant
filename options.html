@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="settingsTitle">LLM Translation Assistant Settings</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="settings-container">
+        <!-- 左侧导航 -->
+        <div class="sidebar">
+            <h1 data-i18n="settingsTitle">设置</h1>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="basic" data-i18n="basicSettings">基本设置</button>
+                <button class="nav-tab" data-tab="model" data-i18n="modelSettings">模型设置</button>
+                <button class="nav-tab" data-tab="glossary" data-i18n="glossarySettings">词汇表</button>
+                <button class="nav-tab" data-tab="import-export" data-i18n="importExportSettings">导入导出</button>
+            </nav>
+        </div>
+        
+        <!-- 右侧内容 -->
+        <div class="content">
+            <!-- 基本设置 -->
+            <div class="tab-content active" id="basic-tab">
+                <h2 data-i18n="basicSettings">基本设置</h2>
+                <form id="basicForm">
+                    <div class="form-group">
+                        <label class="switch-label">
+                            <input type="checkbox" id="autoTranslate" class="switch-input">
+                            <span class="switch-slider"></span>
+                            <span class="switch-text" data-i18n="autoTranslate">打开页面时自动翻译</span>
+                        </label>
+                        <div class="form-help" data-i18n="autoTranslateHelp">启用后，页面加载时会自动点击翻译按钮进行翻译</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="sourceLang" data-i18n="sourceLang">原始语言:</label>
+                        <select id="sourceLang">
+                            <option value="auto" data-i18n="autoDetect">自动检测</option>
+                            <option value="en">English</option>
+                            <option value="zh">中文</option>
+                            <option value="ja">日本語</option>
+                            <option value="ko">한국어</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                            <option value="es">Español</option>
+                            <option value="ru">Русский</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="targetLang" data-i18n="targetLang">目标语言:</label>
+                        <select id="targetLang">
+                            <option value="zh">中文</option>
+                            <option value="en">English</option>
+                            <option value="ja">日本語</option>
+                            <option value="ko">한국어</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                            <option value="es">Español</option>
+                            <option value="ru">Русский</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label data-i18n="prompts">提示词模板:</label>
+                        <div class="prompt-list" id="promptList">
+                            <!-- 提示词列表将在这里动态生成 -->
+                        </div>
+                        <button type="button" id="addPrompt" data-i18n="addPrompt">添加提示词</button>
+                    </div>
+                    
+                    <button type="submit" id="saveBasicBtn" data-i18n="saveSettings">保存设置</button>
+                </form>
+            </div>
+            
+            <!-- 模型设置 -->
+            <div class="tab-content" id="model-tab">
+                <h2 data-i18n="modelSettings">模型设置</h2>
+                <form id="modelForm">
+                    <div class="form-group">
+                        <label for="apiProvider" data-i18n="apiProvider">API Provider:</label>
+                        <select id="apiProvider">
+                            <option value="openai">OpenAI</option>
+                            <option value="anthropic">Anthropic</option>
+                            <option value="google">Google AI</option>
+                            <option value="custom" data-i18n="customProvider">Custom</option>
+                        </select>
+                    </div>
+                    
+                    <div id="customApiGroup" style="display: none;">
+                        <div class="form-group">
+                            <label for="apiUrl" data-i18n="apiUrl">API URL:</label>
+                            <input type="url" id="apiUrl" data-i18n-placeholder="apiUrlPlaceholder" placeholder="https://api.example.com/v1/chat/completions">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="apiKey" data-i18n="apiKey">API Key:</label>
+                        <input type="password" id="apiKey" data-i18n-placeholder="apiKeyPlaceholder" placeholder="Enter your API key">
+                    </div>
+                    
+                    <div class="form-group" id="modelGroup">
+                        <label for="model" data-i18n="model">Model:</label>
+                        <select id="model">
+                            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                            <option value="gpt-4">gpt-4</option>
+                            <option value="gpt-4-turbo">gpt-4-turbo</option>
+                            <option value="custom" data-i18n="customProvider">Custom</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="customModelGroup" style="display: none;">
+                        <label for="customModel" data-i18n="customModel">Custom Model:</label>
+                        <input type="text" id="customModel" data-i18n-placeholder="customModelPlaceholder" placeholder="Enter custom model name">
+                    </div>
+                    
+                    <button type="submit" id="saveModelBtn" data-i18n="saveSettings">保存设置</button>
+                </form>
+            </div>
+            
+            <!-- 词汇表 -->
+            <div class="tab-content" id="glossary-tab">
+                <h2 data-i18n="glossarySettings">词汇表</h2>
+                <div class="glossary-controls">
+                    <button type="button" id="addGlossary" data-i18n="addGlossary">添加词汇</button>
+                    <input type="text" id="searchGlossary" data-i18n-placeholder="searchGlossary" placeholder="搜索词汇...">
+                </div>
+                <div class="glossary-list" id="glossaryList">
+                    <!-- 词汇列表将在这里动态生成 -->
+                </div>
+            </div>
+            
+            <!-- 导入导出 -->
+            <div class="tab-content" id="import-export-tab">
+                <h2 data-i18n="importExportSettings">导入导出</h2>
+                <div class="import-export-section">
+                    <h3 data-i18n="exportSettings">导出设置</h3>
+                    <p data-i18n="exportDescription">导出所有设置为JSON文件，可在其他设备上导入恢复。</p>
+                    <button type="button" id="exportSettings" data-i18n="exportButton">导出设置</button>
+                </div>
+                
+                <div class="import-export-section">
+                    <h3 data-i18n="importSettings">导入设置</h3>
+                    <p data-i18n="importDescription">选择之前导出的JSON文件来恢复设置。</p>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                    <button type="button" id="importSettings" data-i18n="importButton">选择文件导入</button>
+                    <div id="importStatus"></div>
+                </div>
+                
+                <div class="import-export-section">
+                    <h3 data-i18n="currentSettings">当前设置</h3>
+                    <p data-i18n="currentSettingsDescription">以下是当前的所有设置信息（JSON格式）：</p>
+                    <textarea id="currentSettingsDisplay" readonly rows="15" placeholder="设置信息将在这里显示..."></textarea>
+                    <button type="button" id="refreshSettings" data-i18n="refreshSettings">刷新显示</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 状态消息 -->
+    <div id="status"></div>
+    
+    <script src="options.js"></script>
+</body>
+</html>

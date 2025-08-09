@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PNG Icon Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        .icon-container { display: inline-block; margin: 10px; text-align: center; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>PNG Icon Generator for Firefox Extension</h1>
+    <p>This tool generates PNG icons from the SVG design for the Firefox extension.</p>
+    
+    <div id="icons"></div>
+    
+    <button onclick="generateAllIcons()">Generate All Icons</button>
+    <button onclick="downloadAll()">Download All</button>
+    
+    <script>
+        const sizes = [16, 32, 48, 128];
+        const iconData = [];
+        
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // 创建渐变背景
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            
+            // 绘制背景圆形
+            const radius = size * 0.47;
+            const center = size / 2;
+            
+            ctx.beginPath();
+            ctx.arc(center, center, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            // 绘制白色边框
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = size * 0.03;
+            ctx.stroke();
+            
+            // 绘制AI芯片背景
+            const chipSize = size * 0.5;
+            const chipX = (size - chipSize) / 2;
+            const chipY = (size - chipSize) / 2;
+            
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillRect(chipX, chipY, chipSize, chipSize);
+            
+            // 绘制电路线条
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = size * 0.015;
+            
+            const lineStart = chipX + chipSize * 0.15;
+            const lineEnd = chipX + chipSize * 0.85;
+            const lineSpacing = chipSize * 0.15;
+            
+            for (let i = 0; i < 5; i++) {
+                const y = chipY + chipSize * 0.25 + i * lineSpacing;
+                const endX = i % 2 === 0 ? lineEnd : lineEnd - chipSize * 0.2;
+                
+                ctx.beginPath();
+                ctx.moveTo(lineStart, y);
+                ctx.lineTo(endX, y);
+                ctx.stroke();
+            }
+            
+            // 绘制翻译符号
+            ctx.fillStyle = '#764ba2';
+            
+            // 左侧文字块
+            const blockY1 = chipY + chipSize * 0.35;
+            const blockY2 = chipY + chipSize * 0.65;
+            const leftX = chipX + chipSize * 0.2;
+            
+            ctx.fillRect(leftX, blockY1, chipSize * 0.25, chipSize * 0.12);
+            ctx.fillRect(leftX, blockY2, chipSize * 0.2, chipSize * 0.12);
+            
+            // 箭头
+            const arrowX = chipX + chipSize * 0.55;
+            const arrowY = chipY + chipSize * 0.5;
+            const arrowSize = chipSize * 0.08;
+            
+            ctx.beginPath();
+            ctx.moveTo(arrowX, arrowY - arrowSize);
+            ctx.lineTo(arrowX + arrowSize, arrowY);
+            ctx.lineTo(arrowX, arrowY + arrowSize);
+            ctx.closePath();
+            ctx.fill();
+            
+            // 右侧文字块
+            const rightX = chipX + chipSize * 0.7;
+            ctx.fillRect(rightX, blockY1, chipSize * 0.2, chipSize * 0.12);
+            ctx.fillRect(rightX, blockY2, chipSize * 0.25, chipSize * 0.12);
+            
+            // AI文字
+            if (size >= 32) {
+                ctx.fillStyle = '#fff';
+                ctx.font = `bold ${size * 0.1}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.fillText('AI', center, size * 0.85);
+            }
+            
+            return canvas;
+        }
+        
+        function generateAllIcons() {
+            const container = document.getElementById('icons');
+            container.innerHTML = '';
+            iconData.length = 0;
+            
+            sizes.forEach(size => {
+                const canvas = createIcon(size);
+                const iconContainer = document.createElement('div');
+                iconContainer.className = 'icon-container';
+                
+                const label = document.createElement('div');
+                label.textContent = `${size}x${size}`;
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.textContent = 'Download';
+                downloadBtn.onclick = () => downloadIcon(canvas, size);
+                
+                iconContainer.appendChild(canvas);
+                iconContainer.appendChild(label);
+                iconContainer.appendChild(downloadBtn);
+                container.appendChild(iconContainer);
+                
+                iconData.push({ canvas, size });
+            });
+        }
+        
+        function downloadIcon(canvas, size) {
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        function downloadAll() {
+            iconData.forEach(({ canvas, size }) => {
+                setTimeout(() => downloadIcon(canvas, size), size * 10);
+            });
+        }
+        
+        // 页面加载时自动生成图标
+        window.onload = generateAllIcons;
+    </script>
+</body>
+</html>
