@@ -1,141 +1,143 @@
 # LLM Translation Assistant
 
-一个 Firefox 扩展，用于在翻译网站上使用大语言模型来辅助翻译。
+[中文版本](README_zh.md) | English
 
-## 功能特性
+A Firefox extension that uses large language models to assist with translation on translation websites.
 
-- 🤖 **AI驱动翻译**: 支持OpenAI、Anthropic、Google AI等多种大语言模型
-- 🌐 **多站点支持**: 支持多个主流翻译平台
-- ⚙️ **灵活配置**: 可自定义API提供商、模型和参数
-- 🌍 **国际化**: 支持中英文界面
-- 🎨 **现代UI**: 美观的用户界面和流畅的交互体验
+## Features
 
-## 支持的翻译网站
+- 🤖 **AI-Powered Translation**: Supports multiple large language models including OpenAI, Anthropic, Google AI, and more
+- 🌐 **Multi-Site Support**: Compatible with multiple mainstream translation platforms
+- ⚙️ **Flexible Configuration**: Customizable API providers, models, and parameters
+- 🌍 **Internationalization**: Supports both Chinese and English interfaces
+- 🎨 **Modern UI**: Beautiful user interface with smooth interactive experience
 
-- [LibreOffice 翻译平台](https://translations.documentfoundation.org/)
-- [LibreOffice 维基](https://wiki.documentfoundation.org/)
+## Supported Translation Sites
+
+- [LibreOffice Translation Platform](https://translations.documentfoundation.org/)
+- [LibreOffice Wiki](https://wiki.documentfoundation.org/)
 - [Weblate](https://hosted.weblate.org/)
-- 其它Weblate系统（可强制开启）
+- Other Weblate systems (can be force-enabled)
 
-## 支持的AI提供商
+## Supported AI Providers
 
 - **OpenAI**: GPT-4, GPT-3.5 Turbo
 - **Anthropic**: Claude 3 Sonnet, Claude 3 Haiku
 - **Google AI**: Gemini Pro
-- **自定义**: 支持任何兼容OpenAI API格式的服务
+- **Custom**: Supports any service compatible with OpenAI API format
 
-## 安装方法
+## Installation
 
-### 开发版安装
+### Development Version
 
-1. 克隆或下载此项目到本地
-2. 打开Firefox浏览器
-3. 在地址栏输入 `about:debugging`
-4. 点击「此Firefox」
-5. 点击「临时载入附加组件」
-6. 选择项目目录中的 `manifest.json` 文件
+1. Clone or download this project locally
+2. Open Firefox browser
+3. Enter `about:debugging` in the address bar
+4. Click "This Firefox"
+5. Click "Load Temporary Add-on"
+6. Select the `manifest.json` file in the project directory
 
-### 发布版安装
+### Release Version
 
-扩展将发布到Firefox Add-ons商店，届时可直接安装。
+The extension will be published to the Firefox Add-ons store for direct installation.
 
-## 使用方法
+## Usage
 
-### 1. 配置API设置
+### 1. Configure API Settings
 
-首次安装后，扩展会自动打开设置页面：
+After first installation, the extension will automatically open the settings page:
 
-1. 选择API提供商（OpenAI、Anthropic、Google AI或自定义）
-2. 输入API密钥
-3. 选择或自定义模型名称
-4. 点击保存
+1. Select API provider (OpenAI, Anthropic, Google AI, or Custom)
+2. Enter API key
+3. Select or customize model name
+4. Click Save
 
-### 2. 在翻译网站使用
+### 2. Use on Translation Sites
 
-1. 访问支持的翻译网站
-2. 找到翻译文本框
-3. 点击「AI翻译」按钮
-4. 查看AI生成的翻译结果
-5. 点击「应用」按钮将翻译填入文本框
+1. Visit a supported translation website
+2. Find the translation text box
+3. Click the "AI Translate" button
+4. Review the AI-generated translation result
+5. Click "Apply" to fill the translation into the text box
 
-## 项目结构
+## Project Structure
 
 ```
 LLMTranslationAssistant/
-├── manifest.json           # 扩展清单文件
-├── background.js           # 后台脚本
-├── content.js             # 内容脚本
-├── content.css            # 内容脚本样式
-├── options.html           # 设置页面
-├── options.css            # 设置页面样式
-├── options.js             # 设置页面脚本
-├── popup.html             # 弹出窗口
-├── popup.css              # 弹出窗口样式
-├── popup.js               # 弹出窗口脚本
-├── site-configs.js        # 网站配置文件
-├── generate-icons.js      # 图标生成脚本
-├── create-png-icons.html  # PNG图标创建页面
-├── icons/                 # 图标文件
+├── manifest.json           # Extension manifest file
+├── background.js           # Background script
+├── content.js             # Content script
+├── content.css            # Content script styles
+├── options.html           # Settings page
+├── options.css            # Settings page styles
+├── options.js             # Settings page script
+├── popup.html             # Popup window
+├── popup.css              # Popup window styles
+├── popup.js               # Popup window script
+├── site-configs.js        # Site configuration file
+├── generate-icons.js      # Icon generation script
+├── create-png-icons.html  # PNG icon creation page
+├── icons/                 # Icon files
 │   ├── icon.svg
 │   ├── icon-16.svg
 │   ├── icon-32.svg
 │   ├── icon-48.svg
 │   └── icon-128.svg
-├── _locales/              # 国际化文件
+├── _locales/              # Internationalization files
 │   ├── en/
 │   │   └── messages.json
 │   └── zh_CN/
 │       └── messages.json
-└── README.md              # 说明文档
+└── README.md              # Documentation
 ```
 
-## 开发说明
+## Development
 
-### 技术栈
+### Tech Stack
 
-- **Firefox WebExtensions API**: 扩展开发框架
-- **Vanilla JavaScript**: 无依赖的原生JS
-- **CSS3**: 现代CSS特性和动画
-- **SVG**: 矢量图标
+- **Firefox WebExtensions API**: Extension development framework
+- **Vanilla JavaScript**: Dependency-free native JS
+- **CSS3**: Modern CSS features and animations
+- **SVG**: Vector icons
 
-### 核心功能
+### Core Features
 
-1. **设置管理**: 使用 `chrome.storage.sync` 存储用户配置
-2. **内容注入**: 通过内容脚本在翻译网站注入UI元素
-3. **API调用**: 支持多种AI服务的统一接口
-4. **国际化**: 使用 `chrome.i18n` API实现多语言支持
+1. **Settings Management**: Uses `chrome.storage.sync` to store user configurations
+2. **Content Injection**: Injects UI elements into translation sites through content scripts
+3. **API Calls**: Unified interface supporting multiple AI services
+4. **Internationalization**: Multi-language support using `chrome.i18n` API
 
-### 扩展权限
+### Extension Permissions
 
-- `storage`: 存储用户设置
-- `activeTab`: 访问当前标签页
-- `https://*/*`: 支持其他翻译网站和API服务
+- `storage`: Store user settings
+- `activeTab`: Access current tab
+- `https://*/*`: Support other translation sites and API services
 
-## 贡献指南
+## Contributing
 
-欢迎提交Issue和Pull Request！
+Issues and Pull Requests are welcome!
 
-### 开发环境设置
+### Development Environment Setup
 
-1. Fork此仓库
-2. 克隆到本地
-3. 按照安装方法加载扩展
-4. 修改代码并测试
-5. 提交Pull Request
+1. Fork this repository
+2. Clone locally
+3. Load the extension following the installation method
+4. Modify code and test
+5. Submit Pull Request
 
-### 添加新的翻译网站支持
+### Adding New Translation Site Support
 
-1. 在 `site-configs.js` 中添加网站配置
-2. 在 `content.js` 中的 `getSourceText` 方法添加新增的网站提取源文本的逻辑
-3. 在 `manifest.json` 中添加网站权限
-4. 测试功能是否正常
+1. Add site configuration in `site-configs.js`
+2. Add logic for extracting source text for the new site in the `getSourceText` method in `content.js`
+3. Add site permissions in `manifest.json`
+4. Test functionality
 
-## 许可证
+## License
 
 MIT License
 
-## 联系方式
+## Contact
 
-如有问题或建议，请通过以下方式联系：
+For questions or suggestions, please contact via:
 
-- GitHub Issues: [提交问题](https://github.com/ACTom/llmTranslationAssistant/issues)
+- GitHub Issues: [Submit Issue](https://github.com/ACTom/llmTranslationAssistant/issues)

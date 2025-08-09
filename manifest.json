@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
+  "author": "Actom",
+  "homepage_url": "https://github.com/ACTom/llmTranslationAssistant/",
+  "issue_tracker": "https://github.com/ACTom/llmTranslationAssistant/issues",
   
   "browser_specific_settings": {
     "gecko": {
